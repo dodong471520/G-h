@@ -11,6 +11,21 @@ namespace TcpCSFramework
     /// </summary>
     public class Session : ICloneable
     {
+        public void addBuff(byte[] buff)
+        {
+            if (buff == null || buff.Length == 0)
+                return;
+            RecvBuffer.AddRange(buff);
+            if (RecvBuffer.Count <= 2)
+                return ;
+            ushort len = (ushort)System.Net.IPAddress.HostToNetworkOrder((short)BitConverter.ToUInt16(RecvBuffer.ToArray(), 0));
+            int total = len + 2;
+            if (RecvBuffer.Count < total)
+                return ;
+            RecvPacket = new byte[len];
+            RecvBuffer.CopyTo(2, RecvPacket, 0, len);
+            RecvBuffer.RemoveRange(0, total);
+        }
         #region 字段
 
         /// <summary>
@@ -21,14 +36,9 @@ namespace TcpCSFramework
         /// 接收数据缓冲区大小64K
         /// </summary>
         public const int DefaultBufferSize = 1024;
-        /// <summary>
-        /// 接收数据缓冲区
-        /// </summary>
-        private byte[] _recvDataBuffer = new byte[DefaultBufferSize];
-        /// <summary>
-        /// 接收数据缓冲区
-        /// </summary>
-        public List<byte> recvBuffer = new List<byte>();
+        public byte[] RecvDataBuffer=new byte[DefaultBufferSize];
+        private List<byte> RecvBuffer = new List<byte>();
+        public byte[] RecvPacket=null;
         /// <summary>
         /// 客户端发送到服务器的报文
         /// 注意:在有些情况下报文可能只是报文的片断而不完整
@@ -77,22 +87,6 @@ namespace TcpCSFramework
                 _id = value;
             }
         }
-
-        /// <summary>
-        /// 接收数据缓冲区 
-        /// </summary>
-        public byte[] RecvDataBuffer
-        {
-            get
-            {
-                return _recvDataBuffer;
-            }
-            set
-            {
-                _recvDataBuffer = value;
-            }
-        }
-
         /// <summary>
         /// 存取会话的报文
         /// </summary>
@@ -227,11 +221,6 @@ namespace TcpCSFramework
             Session newSession = new Session(_cliSock);
             newSession.Datagram = _datagram;
             newSession.TypeOfExit = _exitType;
-            if (_recvDataBuffer != null)
-            {
-                newSession._recvDataBuffer = new byte[_recvDataBuffer.Length];
-                _recvDataBuffer.CopyTo(newSession._recvDataBuffer, 0);
-            }
             return newSession;
         }
 

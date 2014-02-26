@@ -28,9 +28,10 @@ namespace TcpClient
             cli1.ReceivedDatagram += new NetEvent(test.RecvData);
             cli1.DisConnectedServer += new NetEvent(test.ClientClose);
             cli1.ConnectedServer += new NetEvent(test.ClientConn);
-
+            
             try
             {
+                cli1.Connect("127.0.0.1", 5001);
                 //ÃüÁî¿ØÖÆÑ­»·
                 while (true)
                 {
@@ -137,7 +138,8 @@ namespace TcpClient
 
         void RecvData(object sender, NetEventArgs e)
         {
-            string info = string.Format("recv data:{0} from:{1}.", e.Client.Datagram, e.Client);
+            string str = Encoding.Default.GetString(e.Client.RecvPacket);
+            string info = string.Format("recv data:{0} from:{1}.", str, e.Client);
             Console.WriteLine(info);
             Console.Write(">");
         }

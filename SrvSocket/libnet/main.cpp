@@ -8,7 +8,7 @@ USING_NS_YY
 
 struct MsgHeader
 {
-	int len;
+	UI16 len;
 };
 
 #define MSGHEADERLEN sizeof(MsgHeader)
@@ -45,31 +45,20 @@ public:
 	{
 		const char* begin=buf->readStart();
 		UI32 len=buf->readableBytes();
-		std::string msg(begin,len);
-		printf("%s\n",msg.c_str());
-		buf->readMove(len);
-		return 0;
 		//不完整的消息
 		if(len <= MSGHEADERLEN)
 			return 0;
 
 		//根据网络协议，判断一条完整消息
-		MsgHeader* msg_header=(MsgHeader*)begin;
-
+		u_short packetLen=ntohs(*(u_short*)begin);
 		//未满一条完整消息
-		UI32 total_msg_len=MSGHEADERLEN+msg_header->len;
+		UI32 total_msg_len=MSGHEADERLEN+packetLen;
 		if(len<total_msg_len)
 			return 0;
-
-		std::string str_msg(begin, msg_header->len+MSGHEADERLEN);
-
-		std::string str_msg_body(begin+MSGHEADERLEN, msg_header->len);
+		std::string str_msg_body(begin+MSGHEADERLEN, packetLen);
 		printf("%s\n", str_msg_body.c_str());
-
 		buf->readMove(total_msg_len);
-
 		//onSend_(index, serial, str_msg.c_str(), str_msg.length());
-
 		return 0;
 	}
 	void thread_console()
@@ -80,14 +69,12 @@ public:
 			scanf("%s",str);
 			if(m_index==-1)
 				continue;
-			onSend_(m_index, m_serial,str,strlen(str));
-			continue;
-			MsgHeader header;
-			header.len=strlen(str);
+			u_short packetLen=strlen(str);
 			char buff[256];
-			memcpy(buff,&header,MSGHEADERLEN);
+			u_short packetLenN=htons(packetLen);
+			memcpy(buff,&packetLenN,MSGHEADERLEN);
 			sprintf(buff+MSGHEADERLEN,str);
-			onSend_(m_index, m_serial,buff,MSGHEADERLEN+header.len);
+			onSend_(m_index, m_serial,buff,MSGHEADERLEN+packetLen);
 		}
 	}
 private:
@@ -103,7 +90,7 @@ int main()
 		MakeDelegate(&net_event, &NetEvent::onCon),
 		MakeDelegate(&net_event, &NetEvent::onDisCon),
 		MakeDelegate(&net_event, &NetEvent::onRead));
-
+	
 	net_event.registerOnSend(MakeDelegate(io_service, &IOService::send));
 	Thread thread(MakeDelegate(&net_event,&NetEvent::thread_console));
 	thread.open(1);
