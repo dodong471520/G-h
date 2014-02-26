@@ -54,9 +54,9 @@
     <Compile Include="Assets\script\InputMgr.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CliSocket\TcpCSFramework\TcpCSFramework.csproj">
+    <ProjectReference Include="..\CliSocket\TcpCSFramework\CliSocket.csproj">
       <Project>{61995A22-E310-4813-8512-684413BB034B}</Project>
-      <Name>TcpCSFramework</Name>
+      <Name>CliSocket</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

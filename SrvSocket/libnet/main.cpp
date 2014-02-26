@@ -45,7 +45,10 @@ public:
 	{
 		const char* begin=buf->readStart();
 		UI32 len=buf->readableBytes();
-
+		std::string msg(begin,len);
+		printf("%s\n",msg.c_str());
+		buf->readMove(len);
+		return 0;
 		//不完整的消息
 		if(len <= MSGHEADERLEN)
 			return 0;
@@ -77,6 +80,8 @@ public:
 			scanf("%s",str);
 			if(m_index==-1)
 				continue;
+			onSend_(m_index, m_serial,str,strlen(str));
+			continue;
 			MsgHeader header;
 			header.len=strlen(str);
 			char buff[256];
