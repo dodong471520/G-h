@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpClient", "TcpClient\TcpClient.csproj", "{10C2A075-86A2-4799-8BF1-E36D629D04E0}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpCSFramework", "TcpCSFramework\TcpCSFramework.csproj", "{61995A22-E310-4813-8512-684413BB034B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPServer.csproj", "{6E80501C-385A-4F23-A379-C22AFC9620F0}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10C2A075-86A2-4799-8BF1-E36D629D04E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10C2A075-86A2-4799-8BF1-E36D629D04E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10C2A075-86A2-4799-8BF1-E36D629D04E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10C2A075-86A2-4799-8BF1-E36D629D04E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61995A22-E310-4813-8512-684413BB034B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61995A22-E310-4813-8512-684413BB034B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61995A22-E310-4813-8512-684413BB034B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61995A22-E310-4813-8512-684413BB034B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E80501C-385A-4F23-A379-C22AFC9620F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E80501C-385A-4F23-A379-C22AFC9620F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E80501C-385A-4F23-A379-C22AFC9620F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E80501C-385A-4F23-A379-C22AFC9620F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
