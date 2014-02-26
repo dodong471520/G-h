@@ -470,7 +470,7 @@ namespace TcpCSFramework
                         ICloneable copySession = (ICloneable)sendDataSession;
                         Session clientSession = (Session)copySession.Clone();
                         //clientSession.ClassName = this.GetClassFullName(ref receivedData);
-                        clientSession.Datagram = receivedData;
+                        //clientSession.Datagram = receivedData;
 
                         RecvData(this, new NetEventArgs(clientSession));
                     }
@@ -546,10 +546,10 @@ namespace TcpCSFramework
         /// </summary>
         private bool _isConnected = false;
 
-        /// <summary>
-        /// 接收数据缓冲区大小64K
-        /// </summary>
-        public const int DefaultBufferSize = 1024;
+        ///// <summary>
+        ///// 接收数据缓冲区大小64K
+        ///// </summary>
+        //public const int DefaultBufferSize = 1024;
 
         /// <summary>
         /// 报文解析器
@@ -561,10 +561,10 @@ namespace TcpCSFramework
         /// </summary>
         private Coder _coder;
 
-        /// <summary>
-        /// 接收数据缓冲区
-        /// </summary>
-        private byte[] _recvDataBuffer = new byte[DefaultBufferSize];
+        ///// <summary>
+        ///// 接收数据缓冲区
+        ///// </summary>
+        //private byte[] _recvDataBuffer = new byte[DefaultBufferSize];
 
         #endregion
 
@@ -703,7 +703,25 @@ namespace TcpCSFramework
             _session.ClientSocket.BeginSend(data, 0, data.Length, SocketFlags.None,
              new AsyncCallback(SendDataEnd), _session.ClientSocket);
         }
+        /// <summary>
+        /// 发送数据报文
+        /// </summary>
+        /// <param name="datagram"></param>
+        public virtual void Send(byte[] datagram)
+        {
+            if (datagram.Length == 0)
+            {
+                return;
+            }
 
+            if (!_isConnected)
+            {
+                throw (new ApplicationException("没有连接服务器，不能发送数据"));
+            }
+
+            _session.ClientSocket.BeginSend(datagram, 0, datagram.Length, SocketFlags.None,
+             new AsyncCallback(SendDataEnd), _session.ClientSocket);
+        }
         /// <summary>
         /// 关闭连接
         /// </summary>
@@ -753,8 +771,8 @@ namespace TcpCSFramework
                 ConnectedServer(this, new NetEventArgs(_session));
             }
 
-            _session.ClientSocket.BeginReceive(_recvDataBuffer, 0,
-             DefaultBufferSize, SocketFlags.None,
+            _session.ClientSocket.BeginReceive(_session.RecvDataBuffer, 0,
+             _session.DefaultBufferSize, SocketFlags.None,
              new AsyncCallback(RecvData), socket);
         }
 
@@ -782,45 +800,45 @@ namespace TcpCSFramework
                     return;
                 }
 
-                string receivedData = _coder.GetEncodingString(_recvDataBuffer, recv);
+                //string receivedData = _coder.GetEncodingString(_recvDataBuffer, recv);
                 
                 //通过事件发布收到的报文
                 if (ReceivedDatagram != null)
                 {
-                    if (_resolver != null)
-                    {
-                        if (_session.Datagram != null && _session.Datagram.Length != 0)
-                        {
-                            receivedData = _session.Datagram + receivedData;
-                        }
+                    //if (_resolver != null)
+                    //{
+                    //    if (_session.Datagram != null && _session.Datagram.Length != 0)
+                    //    {
+                    //        receivedData = _session.Datagram + receivedData;
+                    //    }
 
-                        string[] recvDatagrams = _resolver.Resolve(ref receivedData);
-                        foreach (string newDatagram in recvDatagrams)
-                        {
-                            ICloneable copySession = (ICloneable)_session;
-                            Session clientSession = (Session)copySession.Clone();
-                            clientSession.Datagram = newDatagram;
+                    //    string[] recvDatagrams = _resolver.Resolve(ref receivedData);
+                    //    foreach (string newDatagram in recvDatagrams)
+                    //    {
+                    //        ICloneable copySession = (ICloneable)_session;
+                    //        Session clientSession = (Session)copySession.Clone();
+                    //        clientSession.Datagram = newDatagram;
 
-                            //发布一个报文消息
-                            ReceivedDatagram(this, new NetEventArgs(clientSession));
-                        }
+                    //        //发布一个报文消息
+                    //        ReceivedDatagram(this, new NetEventArgs(clientSession));
+                    //    }
 
-                        //剩余的代码片断,下次接收的时候使用
-                        _session.Datagram = receivedData;
-                    }
-                    else
-                    {
-                        ICloneable copySession = (ICloneable)_session;
-                        Session clientSession = (Session)copySession.Clone();
-                        clientSession.Datagram = receivedData;
+                    //    //剩余的代码片断,下次接收的时候使用
+                    //    _session.Datagram = receivedData;
+                    //}
+                    //else
+                    //{
+                        //ICloneable copySession = (ICloneable)_session;
+                        //Session clientSession = (Session)copySession.Clone();
+                        //clientSession.Datagram = receivedData;
 
-                        ReceivedDatagram(this, new NetEventArgs(clientSession));
-                    }
-                
+                        ReceivedDatagram(this, new NetEventArgs(_session));
+                    //}
+                    
                 }//end of if(ReceivedDatagram != null)
                 
                 //继续接收数据
-                _session.ClientSocket.BeginReceive(_recvDataBuffer, 0, DefaultBufferSize, SocketFlags.None,
+                _session.ClientSocket.BeginReceive(_session.RecvDataBuffer, 0, _session.DefaultBufferSize, SocketFlags.None,
                  new AsyncCallback(RecvData), _session.ClientSocket);
             }
             catch (SocketException ex)

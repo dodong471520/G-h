@@ -17,12 +17,18 @@ namespace TcpCSFramework
         /// 会话ID
         /// </summary>
         private SessionId _id;
-
+        /// <summary>
+        /// 接收数据缓冲区大小64K
+        /// </summary>
+        public const int DefaultBufferSize = 1024;
         /// <summary>
         /// 接收数据缓冲区
         /// </summary>
-        private byte[] _recvDataBuffer;
-
+        private byte[] _recvDataBuffer = new byte[DefaultBufferSize];
+        /// <summary>
+        /// 接收数据缓冲区
+        /// </summary>
+        public List<byte> recvBuffer = new List<byte>();
         /// <summary>
         /// 客户端发送到服务器的报文
         /// 注意:在有些情况下报文可能只是报文的片断而不完整
@@ -221,7 +227,11 @@ namespace TcpCSFramework
             Session newSession = new Session(_cliSock);
             newSession.Datagram = _datagram;
             newSession.TypeOfExit = _exitType;
-
+            if (_recvDataBuffer != null)
+            {
+                newSession._recvDataBuffer = new byte[_recvDataBuffer.Length];
+                _recvDataBuffer.CopyTo(newSession._recvDataBuffer, 0);
+            }
             return newSession;
         }
 
