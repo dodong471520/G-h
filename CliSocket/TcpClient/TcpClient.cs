@@ -24,7 +24,7 @@ namespace TcpClient
             TcpClient test = new TcpClient();
             TcpCli cli1 = new TcpCli(new Coder(Coder.EncodingMothord.Default));
 
-            cli1.Resovlver = new DatagramResolver("]}");
+            //cli1.Resovlver = new DatagramResolver("]}");
             cli1.ReceivedDatagram += new NetEvent(test.RecvData);
             cli1.DisConnectedServer += new NetEvent(test.ClientClose);
             cli1.ConnectedServer += new NetEvent(test.ClientConn);
