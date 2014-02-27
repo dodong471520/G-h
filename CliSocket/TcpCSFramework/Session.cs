@@ -18,12 +18,13 @@ namespace TcpCSFramework
             RecvBuffer.AddRange(buff);
             if (RecvBuffer.Count <= 2)
                 return ;
-            ushort len = (ushort)System.Net.IPAddress.HostToNetworkOrder((short)BitConverter.ToUInt16(RecvBuffer.ToArray(), 0));
+            UInt16 len = (UInt16)System.Net.IPAddress.HostToNetworkOrder((short)BitConverter.ToUInt16(RecvBuffer.ToArray(), 0));
             int total = len + 2;
             if (RecvBuffer.Count < total)
                 return ;
-            RecvPacket = new byte[len];
-            RecvBuffer.CopyTo(2, RecvPacket, 0, len);
+            byte[] tbuff = new byte[len];
+            RecvBuffer.CopyTo(2, tbuff, 0, len);
+            RecvPacket.BeginRead(tbuff);
             RecvBuffer.RemoveRange(0, total);
         }
         #region 字段
@@ -38,7 +39,7 @@ namespace TcpCSFramework
         public const int DefaultBufferSize = 1024;
         public byte[] RecvDataBuffer=new byte[DefaultBufferSize];
         private List<byte> RecvBuffer = new List<byte>();
-        public byte[] RecvPacket=null;
+        public CmdPacket RecvPacket=new CmdPacket();
         /// <summary>
         /// 客户端发送到服务器的报文
         /// 注意:在有些情况下报文可能只是报文的片断而不完整

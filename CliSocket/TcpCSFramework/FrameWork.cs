@@ -681,7 +681,11 @@ namespace TcpCSFramework
             newsock.BeginConnect(iep, new AsyncCallback(Connected), newsock);
 
         }
-        public virtual void Send(string datagram)
+        public void Send(CmdPacket packet)
+        {
+            Send(packet.GetData());
+        }
+        public void Send(string datagram)
         {
             if (datagram.Length == 0)
                 return;
@@ -689,7 +693,7 @@ namespace TcpCSFramework
                 throw (new ApplicationException("没有连接服务器，不能发送数据"));
             Send(_coder.GetEncodingBytes(datagram));
         }
-        public virtual void Send(byte[] datagram)
+        public void Send(byte[] datagram)
         {
             if (datagram.Length == 0)
                 return;
@@ -702,10 +706,7 @@ namespace TcpCSFramework
             _session.ClientSocket.BeginSend(buff.ToArray(), 0, buff.Count, SocketFlags.None,
              new AsyncCallback(SendDataEnd), _session.ClientSocket);
         }
-        /// <summary>
-        /// 关闭连接
-        /// </summary>
-        public virtual void Close()
+        public void Close()
         {
             if (!_isConnected)
             {

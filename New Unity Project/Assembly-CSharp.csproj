@@ -46,11 +46,14 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\network\CmdPacket.cs" />
      <Compile Include="Assets\network\NetPacket.cs" />
      <Compile Include="Assets\network\TcpSession.cs" />
      <Compile Include="Assets\script\Client.cs" />
      <Compile Include="Assets\script\InputMgr.cs" />
+     <Compile Include="Assets\script\Proto.cs" />
+ <Reference Include="TcpCSFramework">
+ <HintPath>Assets\plugin\TcpCSFramework.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -138,7 +138,7 @@ namespace TcpClient
 
         void RecvData(object sender, NetEventArgs e)
         {
-            string str = Encoding.Default.GetString(e.Client.RecvPacket);
+            string str = Encoding.Default.GetString(e.Client.RecvPacket.GetData());
             string info = string.Format("recv data:{0} from:{1}.", str, e.Client);
             Console.WriteLine(info);
             Console.Write(">");

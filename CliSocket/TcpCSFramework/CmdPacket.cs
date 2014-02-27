@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-    class CmdPacket
+namespace TcpCSFramework
+{
+    public class CmdPacket
     {
         public const int MAX_CMD_PACKET_SIZE = 1024 * 16;
-        private List<byte> m_WriteData=new List<byte>();
+        private List<byte> m_WriteData = new List<byte>();
         public void BeginWrite()
         {
             m_WriteData.Clear();
@@ -14,6 +15,10 @@ using System.Text;
         public void WriteByte(char c)
         {
             m_WriteData.AddRange(BitConverter.GetBytes(c));
+        }
+        public void WriteUShort(UInt16 l)
+        {
+            m_WriteData.AddRange(BitConverter.GetBytes(l));
         }
         public void WriteShort(short l)
         {
@@ -29,14 +34,19 @@ using System.Text;
         }
         public void WriteString(string l)
         {
-            WriteShort(System.Convert.ToInt16(System.Text.Encoding.Default.GetByteCount(l)));
+            WriteUShort(System.Convert.ToUInt16(System.Text.Encoding.Default.GetByteCount(l)));
             m_WriteData.AddRange(System.Text.Encoding.Default.GetBytes(l));
         }
         private byte[] m_ReadData;
-        private int m_ReadOffset=0;
+        private int m_ReadOffset = 0;
         public void BeginRead()
         {
             m_ReadData = m_WriteData.ToArray();
+            m_ReadOffset = 0;
+        }
+        public void BeginRead(byte[] bytes)
+        {
+            m_ReadData = bytes;
             m_ReadOffset = 0;
         }
         public bool ReadByte(ref char c)
@@ -45,6 +55,14 @@ using System.Text;
                 return false;
             c = BitConverter.ToChar(m_ReadData, m_ReadOffset);
             m_ReadOffset += 1;
+            return true;
+        }
+        public bool ReadUShort(ref UInt16 l)
+        {
+            if (m_ReadOffset + 2 > m_ReadData.Length)
+                return false;
+            l = BitConverter.ToUInt16(m_ReadData, m_ReadOffset);
+            m_ReadOffset += 2;
             return true;
         }
         public bool ReadShort(ref short l)
@@ -73,12 +91,12 @@ using System.Text;
         }
         public bool ReadString(ref string l)
         {
-            short length=0;
+            short length = 0;
             if (!ReadShort(ref length))
                 return false;
             if (m_ReadOffset + length > m_ReadData.Length)
                 return false;
-            l=System.Text.Encoding.Default.GetString(m_ReadData,m_ReadOffset,length);
+            l = System.Text.Encoding.Default.GetString(m_ReadData, m_ReadOffset, length);
             m_ReadOffset += length;
             return true;
         }
@@ -95,3 +113,4 @@ using System.Text;
             m_ReadData = readByte.ToArray();
         }
     }
+}
