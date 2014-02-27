@@ -15,9 +15,9 @@ public class Client : MonoBehaviour {
 	{
 	    return System.Environment.TickCount;
 	}
-	public static void Sys_Log(string str)
+	public static void Sys_Log(object obj,params object[] para)
 	{
-	    Debug.Log(str);
+	    Debug.Log(string.Format(obj.ToString(),para));
 	}
     void ClientConn(object sender, NetEventArgs e)
     {
@@ -31,10 +31,8 @@ public class Client : MonoBehaviour {
     }
     void RecvData(object sender, NetEventArgs e)
     {
-        string str = Encoding.Default.GetString(e.Client.RecvPacket);
-        string info = string.Format("recv data:{0} from:{1}.", str, e.Client);
-        Console.WriteLine(info);
-        Console.Write(">");
+        string str = Encoding.Default.GetString(e.Client.RecvPacket.GetData());
+        Sys_Log("recv data:{0} from:{1}.", str, e.Client);
     }
     TcpCli m_client = new TcpCli();
     void Awake()
@@ -52,7 +50,7 @@ public class Client : MonoBehaviour {
         {
             if (GUILayout.Button("Connect"))
             {
-                Security.PrefetchSocketPolicy("127.0.0.1", 5001);
+                //Security.PrefetchSocketPolicy("127.0.0.1", 5001);
                 m_client.Connect("127.0.0.1", 5001);
             }
         }

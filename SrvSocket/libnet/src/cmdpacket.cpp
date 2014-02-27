@@ -1,10 +1,10 @@
 /*
 g_CmdPacket.cpp: implementation of the CG_CmdPacket class.
 */
-
-#include "../export/cmdpacket.h"
 #include <stdlib.h>
 #include <memory>
+#include <WinSock.h>
+#include "../export/cmdpacket.h"
 CmdPacket::CmdPacket()
 {
 	m_nMaxSize = 0;
@@ -48,7 +48,7 @@ bool CmdPacket::WriteByte(char c)
 
 void CmdPacket::BeginRead(char const*p,int len)
 {
-	m_pReadData=p;
+	m_pReadData=const_cast<char*>(p);
 	m_nLen = len;
 	m_nReadOffset = 0;
 }
@@ -86,11 +86,18 @@ bool CmdPacket::ReadBinary(char **data, int *len)
 
 bool CmdPacket::WriteShort(short s)
 {
+	s=htons((u_short)s);
+	return WriteData(&s,SHORT_SIZE);
+}
+bool CmdPacket::WriteUShort( u_short s )
+{
+	s=htons(s);
 	return WriteData(&s,SHORT_SIZE);
 }
 
 bool CmdPacket::WriteLong(long l)
 {
+	l=htonl(l);
 	return WriteData(&l,LONG_SIZE);
 }
 
@@ -106,12 +113,25 @@ bool CmdPacket::ReadByte(char *c)
 
 bool CmdPacket::ReadShort(short *s)
 {
-	return ReadData(s,SHORT_SIZE);
+	bool ret=ReadData(s,SHORT_SIZE);
+	if(!ret)return ret;
+	*s=ntohs(*s);
+	return ret;
+}
+bool CmdPacket::ReadUShort( u_short *s )
+{
+	bool ret=ReadData(s,SHORT_SIZE);
+	if(!ret)return ret;
+	*s=ntohs(*s);
+	return ret;
 }
 
 bool CmdPacket::ReadLong(long *l)
 {
-	return ReadData(l,LONG_SIZE);
+	bool ret=ReadData(l,LONG_SIZE);
+	if(!ret)return ret;
+	*l=ntohl(*l);
+	return ret;
 }
 
 bool CmdPacket::ReadFloat(float *f)
@@ -175,4 +195,7 @@ int CmdPacket::GetMaxSize()
 {
 	return m_nMaxSize;
 }
+
+
+
 

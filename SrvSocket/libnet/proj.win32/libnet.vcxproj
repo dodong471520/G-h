@@ -128,6 +128,7 @@
     <ClInclude Include="..\export\sockbuf.h" />
     <ClInclude Include="ghs_game.h" />
     <ClInclude Include="ghs_player.h" />
+    <ClInclude Include="Proto.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

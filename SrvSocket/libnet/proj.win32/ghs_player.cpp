@@ -1,11 +1,14 @@
-#include "gh_player.h"
+#include "stdafx.h"
+#include "ghs_player.h"
 
 
-gh_player::gh_player(void)
+GHS_Player::GHS_Player( UI32 index,UI64 serial )
+	:m_index(index),m_serial(serial)
 {
+
 }
 
 
-gh_player::~gh_player(void)
+GHS_Player::~GHS_Player(void)
 {
 }

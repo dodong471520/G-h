@@ -17,15 +17,8 @@ struct MsgHeader
 
 class NetEvent
 {
-private:
-	typedef FastDelegate4<UI32, UI64, const char*, UI32> OnSendCallback;
 public:
 	NetEvent(){}
-
-	void registerOnSend(OnSendCallback onSend)
-	{
-		onSend_=onSend;
-	}
 
 	//iocp thread or select io thread
 	void onCon(UI32 index, UI64 serial, const char* ip, UI32 port)
@@ -37,7 +30,7 @@ public:
 	//io thread
 	void onDisCon(UI32 index, UI64 serial, const char* ip, UI32 port)
 	{
-		SGHS_Game::shared()->removePlayer(index,serial);
+		SGHS_Game::shared()->removePlayer(serial);
 		LOG_INFO("disconnection, index:%d, serial:%llu, ip:%s, port:%d\n",index, serial, ip, port);
 	}
 
@@ -57,20 +50,11 @@ public:
 			return 0;
 		CmdPacket *packet=new CmdPacket();
 		packet->BeginRead(begin+MSGHEADERLEN,packetLen);
-		SGHS_Game::shared()->onRead(packet);
+		SGHS_Game::shared()->onRead(index,serial,packet);
 		delete packet;
 		buf->readMove(total_msg_len);
 		return 0;
 	}
-	void thread_console()
-	{
-		while(true)
-		{
-			
-		}
-	}
-private:
-	OnSendCallback onSend_;
 };
 
 int main()
@@ -81,12 +65,10 @@ int main()
 		MakeDelegate(&net_event, &NetEvent::onDisCon),
 		MakeDelegate(&net_event, &NetEvent::onRead));
 	
-	net_event.registerOnSend(MakeDelegate(io_service, &IOService::send));
-	Thread thread(MakeDelegate(&net_event,&NetEvent::thread_console));
-	thread.open(1);
+	SGHS_Game::shared()->registerOnSend(MakeDelegate(io_service, &IOService::send));
 
 	io_service->listen("127.0.0.1", 5001);
-
+	LOG_INFO("server start 127.0.0.1:5001");
 	while(true)
 	{
 		io_service->eventLoop(1024, 5);

@@ -143,6 +143,7 @@
     <ClInclude Include="..\export\Singleton.h">
       <Filter>libnet\export</Filter>
     </ClInclude>
+    <ClInclude Include="Proto.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\readme.txt" />

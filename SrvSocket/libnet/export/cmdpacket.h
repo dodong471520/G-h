@@ -26,6 +26,7 @@ public:
 	bool ReadFloat(float *f);
 	bool ReadLong(long *l);
 	bool ReadShort(short *s);
+	bool ReadUShort(u_short *s);
 	bool ReadByte(char *c);
 
 	bool WriteBinary(char *data,int len);
@@ -33,6 +34,7 @@ public:
 	bool WriteFloat(float f);
 	bool WriteLong(long l);
 	bool WriteShort(short s);
+	bool WriteUShort(u_short s);
 	bool WriteByte(char c);
 
 	char *GetData();
