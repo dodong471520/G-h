@@ -1,10 +1,10 @@
-﻿生成启动时间为 2014/2/28 0:07:02。
+﻿生成启动时间为 2014/2/28 1:45:56。
      1>项目“C:\Users\Administrator\Documents\GitHub\G-h\SrvSocket\libnet\proj.win32\libnet.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在对“C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\SvrSocket.unsuccessfulbuild”执行 Touch 任务。
+         正在创建“C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\SvrSocket.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../libbase/export /I../export /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\\" /Fd"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ghs_game.cpp
-         ghs_game.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../libbase/export /I../export /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\\" /Fd"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GHS_Lobby.cpp
+         GHS_Lobby.cpp
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\Debug\SvrSocket.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\SvrSocket.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\Debug\SvrSocket.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\Debug\SvrSocket.lib" /MACHINE:X86 "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\yy_file.obj"
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\yy_log.obj"
@@ -17,8 +17,9 @@
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\peer_manager.obj"
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\sockbuf.obj"
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\Win_IOCP_io_service.obj"
-         "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\ghs_game.obj"
-         "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\ghs_player.obj"
+         "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\GHS_Game.obj"
+         "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\GHS_Lobby.obj"
+         "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\GHS_Player.obj"
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\ghs_server.obj"
          "C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\\Garbage\libnetDebug\stdafx.obj"
          LINK : 没有找到 C:\Users\Administrator\Documents\GitHub\G-h\GH_Project\Debug\SvrSocket.exe 或上一个增量链接没有生成它；正在执行完全链接

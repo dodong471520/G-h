@@ -22,6 +22,9 @@
     <Filter Include="logic">
       <UniqueIdentifier>{15c25c5a-10f7-46eb-9a7d-1b0a9bb779da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="other">
+      <UniqueIdentifier>{f9944c5d-2f5c-4295-98dd-79cc110ff774}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\io_service.cpp">
@@ -54,17 +57,24 @@
     <ClCompile Include="..\..\libbase\src\yy_utility.cpp">
       <Filter>libnet\libbase\src</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="ghs_game.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
-    <ClCompile Include="ghs_player.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cmdpacket.cpp">
       <Filter>libnet\src</Filter>
     </ClCompile>
-    <ClCompile Include="ghs_server.cpp" />
+    <ClCompile Include="ghs_server.cpp">
+      <Filter>other</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>other</Filter>
+    </ClCompile>
+    <ClCompile Include="GHS_Lobby.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="GHS_Player.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="GHS_Game.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\peer_manager.h">
@@ -130,20 +140,27 @@
     <ClInclude Include="..\..\libbase\export\yy_utility.h">
       <Filter>libnet\libbase\export</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ghs_game.h">
-      <Filter>logic</Filter>
-    </ClInclude>
-    <ClInclude Include="ghs_player.h">
-      <Filter>logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\export\cmdpacket.h">
       <Filter>libnet\export</Filter>
     </ClInclude>
     <ClInclude Include="..\export\Singleton.h">
       <Filter>libnet\export</Filter>
     </ClInclude>
-    <ClInclude Include="Proto.h" />
+    <ClInclude Include="Proto.h">
+      <Filter>other</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>other</Filter>
+    </ClInclude>
+    <ClInclude Include="GHS_Lobby.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="GHS_Player.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="GHS_Game.h">
+      <Filter>logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\readme.txt" />

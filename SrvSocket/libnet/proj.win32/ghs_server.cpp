@@ -3,7 +3,7 @@
 #include <string>
 #include "io_service.h"
 #include "yy_thread.h"
-#include "ghs_game.h"
+#include "GHS_Lobby.h"
 
 USING_NS_YY
 //#pragma comment(lib, "libbase.lib")

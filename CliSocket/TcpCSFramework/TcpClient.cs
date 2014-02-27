@@ -34,10 +34,6 @@ namespace TcpClient
             {
                 Console.Write(">");
                 string cmd = Console.ReadLine();
-                CmdPacket packet = new CmdPacket();
-                packet.BeginWrite();
-                packet.WriteUShort(0x0001);
-                cli1.Send(packet);
             }//end of while
         }
 
@@ -71,8 +67,10 @@ namespace TcpClient
 
         void RecvData(object sender, NetEventArgs e)
         {
+            ushort cmd=0;
+            e.Client.RecvPacket.ReadUShort(ref cmd);
             string str = Encoding.Default.GetString(e.Client.RecvPacket.GetData());
-            string info = string.Format("recv data:{0} from:{1}.", str, e.Client);
+            string info = string.Format("recv data:{0}", cmd);
             Console.WriteLine(info);
             Console.Write(">");
         }

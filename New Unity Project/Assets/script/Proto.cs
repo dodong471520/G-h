@@ -6,4 +6,5 @@ class Proto
 {
     public const UInt16 AutoMatch = 0x0001;
     public const UInt16 UAutoMatch = 0x0002;
+    public const UInt16 GameInit = 0x0003;
 }

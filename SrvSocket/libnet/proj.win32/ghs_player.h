@@ -1,4 +1,5 @@
 #pragma once
+#include "cmdpacket.h"
 class GHS_Player
 {
 public:
@@ -11,5 +12,8 @@ public:
 private:
 	UI32 m_index;
 	UI64 m_serial;
+	CmdPacket m_packet;
+public:
+	void sendReady();
 };
 

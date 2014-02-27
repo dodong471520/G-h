@@ -26,11 +26,32 @@ public class Client : MonoBehaviour {
     }
     void ClientClose(object sender, NetEventArgs e)
     {
+        m_state = State.ST_Disconnected;
         Sys_Log("Disconnectd:" + e.Client.ClientSocket.RemoteEndPoint
             + "\n" + e.Client.TypeOfExit);
     }
+    static string getString(byte[] buff)
+    {
+        string ret = "";
+        foreach (var item in buff)
+        {
+            ret += string.Format("{0:X} ", item);
+        }
+        return string.Format("0x{0}", ret);
+    }
     void RecvData(object sender, NetEventArgs e)
     {
+        Sys_Log(getString(e.Client.RecvPacket.GetData()));
+        UInt16 cmd=0;
+        e.Client.RecvPacket.ReadUShort(ref cmd);
+        switch (cmd)
+        {
+            case Proto.GameInit:
+                {
+                    m_state = State.ST_GameInit;
+                    break;
+                }
+        }
         string str = Encoding.Default.GetString(e.Client.RecvPacket.GetData());
         Sys_Log("recv data:{0} from:{1}.", str, e.Client);
     }
@@ -41,12 +62,12 @@ public class Client : MonoBehaviour {
         m_client.DisConnectedServer += new NetEvent(ClientClose);
         m_client.ConnectedServer += new NetEvent(ClientConn);
     }
-    public enum State { ST_Ready,ST_Connected, ST_WaitingToMatch};
-    public State m_state=State.ST_Ready;
+    public enum State { ST_None, ST_Connected, ST_Disconnected, ST_WaitingToMatch, ST_GameInit };
+    public State m_state = State.ST_Disconnected;
     void OnGUI()
     {
         GUILayout.Label(m_state.ToString());
-        if (!m_client.IsConnected)
+        if (m_state == State.ST_Disconnected)
         {
             if (GUILayout.Button("Connect"))
             {
@@ -59,6 +80,7 @@ public class Client : MonoBehaviour {
             if (GUILayout.Button("Disconnect"))
             {
                 m_client.Close();
+                m_state = State.ST_Disconnected;
             }
             switch (m_state)
             {
@@ -79,6 +101,12 @@ public class Client : MonoBehaviour {
                         packet.WriteUShort(Proto.UAutoMatch);
                         m_client.Send(packet);
                         m_state = State.ST_Connected;
+                    }
+                    break;
+                case State.ST_GameInit:
+                    if (GUILayout.Button("Ready"))
+                    {
+                       
                     }
                     break;
             }
