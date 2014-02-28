@@ -40,45 +40,7 @@ void GHS_Lobby::onRead(UI32 index,UI64 serial,CmdPacket* packet )
 	GHS_Player* player=getPlayer(serial);
 	if(player==NULL)
 		return;
-	UI16 cmd;
-	packet->ReadUShort(&cmd);
-	switch(cmd)
-	{
-	case PROTO_C_AutoMatch:
-		{
-			m_queue.push_back(player);
-			makeGame();
-			break;
-		}
-	case PROTO_C_UAutoMatch:
-		{
-			VEC_PLAYER_ITOR itor=find(m_queue.begin(),m_queue.end(),player);
-			if(itor!=m_queue.end())
-				m_queue.erase(itor);
-			break;
-		}
-	case PROTO_C_GameReady:
-		{
-			player->m_ready=true;
-			if(player->m_other&&player->m_other->m_ready)
-			{
-				player->m_game->m_player1->sendGameStart(true);
-				player->m_game->m_player2->sendGameStart(false);
-			}
-			break;
-		}
-	case PROTO_C_GameShot:
-		{
-			if(player->m_game)
-			{
-				float x=0;
-				packet->ReadFloat(&x);
-				float y=0;
-				packet->ReadFloat(&y);
-				player->m_other->sendGameShot(x,y);
-			}
-		}
-	}
+	player->recv(packet);
 }
 
 void GHS_Lobby::send( UI32 index,UI64 serial,CmdPacket *packet )
@@ -114,7 +76,32 @@ void GHS_Lobby::makeGame()
 	GHS_Game *game=new GHS_Game(player1,player2);
 	player1->m_game=game;player1->m_other=player2;
 	player2->m_game=game;player2->m_other=player1;
+	if(player1->m_rtt<=player2->m_rtt)
+		player1->m_bSer;
 	player1->sendGameInit();
 	player2->sendGameInit();
 	m_games.push_back(game);
+}
+
+void GHS_Lobby::process()
+{
+	MAP_PLAYER_ITOR itor=m_players.begin();
+	for(;itor!=m_players.end();++itor)
+	{
+		GHS_Player *player=itor->second;
+		player->process();
+	}
+}
+
+void GHS_Lobby::enqueue( GHS_Player* player )
+{
+	m_queue.push_back(player);
+	makeGame();
+}
+
+void GHS_Lobby::unqueue( GHS_Player* player )
+{
+	VEC_PLAYER_ITOR itor=find(m_queue.begin(),m_queue.end(),player);
+	if(itor!=m_queue.end())
+		m_queue.erase(itor);
 }

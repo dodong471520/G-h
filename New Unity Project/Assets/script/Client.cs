@@ -11,9 +11,9 @@ using TcpCSFramework;
 using System.Text;
 
 public class Client : MonoBehaviour {
-    public static int Sys_GetTime()
+    public static UInt32 Sys_GetTime()
 	{
-	    return System.Environment.TickCount;
+	    return (UInt32)System.Environment.TickCount;
 	}
 	public static void Sys_Log(object obj,params object[] para)
 	{
@@ -21,6 +21,8 @@ public class Client : MonoBehaviour {
 	}
     void ClientConn(object sender, NetEventArgs e)
     {
+        m_lstReadTime = Sys_GetTime();
+        m_lstSendTime = Sys_GetTime();
         m_state = State.ST_Connected;
         Sys_Log("Connected:"+e.Client.ClientSocket.RemoteEndPoint);
     }
@@ -44,10 +46,32 @@ public class Client : MonoBehaviour {
     void RecvData(object sender, NetEventArgs e)
     {
         Sys_Log(getString(e.Client.RecvPacket.GetReadData()));
+        m_lstReadTime = Sys_GetTime();
         UInt16 cmd=0;
-        e.Client.RecvPacket.ReadUShort(ref cmd);
+        CmdPacket packet = e.Client.RecvPacket;
+        packet.ReadUShort(out cmd);
         switch (cmd)
         {
+            case Proto.Keep_Alive:
+                {
+                    UInt32 time=0;
+                    if (packet.ReadUInt(out time))
+                    {
+                        CmdPacket tpacket = new CmdPacket();
+                        tpacket.WriteUShort(Proto.Keep_Alive_Ack);
+                        tpacket.WriteUInt(time);
+                        send(tpacket);
+                    }
+                    break;
+                }
+            case Proto.Keep_Alive_Ack:
+                {
+                    UInt32 time = 0;
+                    if (packet.ReadUInt(out time))
+                        m_rtt = Sys_GetTime() - time;
+                    Sys_Log("herea:"+(int)m_rtt);
+                    break;
+                }
             case Proto.S_GameInit:
                 {
                     m_state = State.ST_GameInit;
@@ -55,17 +79,21 @@ public class Client : MonoBehaviour {
                 }
             case Proto.S_GameStart:
                 {
-                    char bottom='\0';
-                    e.Client.RecvPacket.ReadByte(ref bottom);
-                    m_game.start(bottom!=0);
                     m_state = State.ST_GameRunning;
+                    char bSer;
+                    if (packet.ReadByte(out bSer))
+                        m_game.m_bSer = bSer != 0;
+                    char bottom='\0';
+                    if(packet.ReadByte(out bottom))
+                        m_game.m_bottom=(bottom!=0);
+                    m_game.start();
                     break;
                 }
             case Proto.S_GameShot:
                 {
                     float x=0,y=0;
-                    e.Client.RecvPacket.ReadFloat(ref x);
-                    e.Client.RecvPacket.ReadFloat(ref y);
+                    e.Client.RecvPacket.ReadFloat(out x);
+                    e.Client.RecvPacket.ReadFloat(out y);
                     m_other.shot(x, y);
                     break;
                 }
@@ -82,6 +110,7 @@ public class Client : MonoBehaviour {
     public State m_state = State.ST_Disconnected;
     void OnGUI()
     {
+        GUILayout.Label("Ping:" + m_rtt);
         GUILayout.Label(m_state.ToString());
         if (m_state == State.ST_Disconnected)
         {
@@ -106,7 +135,7 @@ public class Client : MonoBehaviour {
                         //send automatch
                         CmdPacket packet = new CmdPacket();
                         packet.WriteUShort(Proto.C_AutoMatch);
-                        m_client.Send(packet);
+                        send(packet);
                         m_state = State.ST_WaitingToMatch;
                     }
                     break;
@@ -115,7 +144,7 @@ public class Client : MonoBehaviour {
                     {
                         CmdPacket packet = new CmdPacket();
                         packet.WriteUShort(Proto.C_UAutoMatch);
-                        m_client.Send(packet);
+                        send(packet);
                         m_state = State.ST_Connected;
                     }
                     break;
@@ -125,7 +154,7 @@ public class Client : MonoBehaviour {
                         {
                             CmdPacket packet = new CmdPacket();
                             packet.WriteUShort(Proto.C_GameReady);
-                            m_client.Send(packet);
+                            send(packet);
                             m_state = State.ST_WaitingToStart;
                         }
                         break;
@@ -136,13 +165,38 @@ public class Client : MonoBehaviour {
             }
         }
     }
+    void FixedUpdate()
+    {
+        if (m_state != State.ST_Disconnected)
+        {
+            if (Sys_GetTime() - m_lstSendTime > 10 * 1000)
+            {
+                CmdPacket packet = new CmdPacket();
+                packet.WriteUShort(Proto.Keep_Alive);
+                packet.WriteUInt(Sys_GetTime());
+                send(packet);
+            }
+            if (Sys_GetTime() - m_lstReadTime > 30 * 1000)
+            {
+                //dead 
+            }
+        }
+    }
     public void sendInput(float x, float y)
     {
         CmdPacket packet = new CmdPacket();
         packet.WriteUShort(Proto.C_GameShot);
         packet.WriteFloat(x);
         packet.WriteFloat(y);
+        send(packet);
+    }
+    private UInt32 m_lstSendTime;
+    private UInt32 m_lstReadTime;
+    public UInt32 m_rtt;
+    public void send(CmdPacket packet)
+    {
         m_client.Send(packet);
+        m_lstSendTime = Sys_GetTime();
     }
     const int NET_KEEP_ALIVE_INTERVAL = 10 * 1000;
     const int NET_CONNECT_TIMEOUT = 30 * 1000;

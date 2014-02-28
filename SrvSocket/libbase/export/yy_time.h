@@ -33,6 +33,7 @@ public:
 	UI32 registerTimer(OnTimeCallback onTime, UI32 time_interval);
 	void unRegisterTimer(UI32 timer_id);
 	void run();
+
 private:
 	TimerInfo m_timers[10];
 };

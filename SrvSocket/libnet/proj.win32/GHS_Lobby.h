@@ -18,6 +18,7 @@ public:
 public:
 	GHS_Lobby(void);
 	virtual ~GHS_Lobby(void);
+	void process();
 public:
 	void addPlayer(UI32 index,UI64 serial);
 	void removePlayer(UI64 serial );
@@ -37,6 +38,9 @@ private:
 	typedef vector<GHS_Game*>::iterator VEC_GAME_ITOR;
 private:
 	void makeGame();
+public:
+	void enqueue(GHS_Player* player);
+	void unqueue(GHS_Player* player);
 };
 
 typedef Singleton<GHS_Lobby> SGHS_Game;

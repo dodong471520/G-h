@@ -72,6 +72,7 @@ int main()
 	while(true)
 	{
 		io_service->eventLoop(1024, 5);
+		SGHS_Game::shared()->process();
 		//OnFrame();
 	}
 	return 0;

@@ -11,4 +11,7 @@ class Proto
     public const UInt16 S_GameStart = 0x0005;
     public const UInt16 C_GameShot = 0x0006;
     public const UInt16 S_GameShot = 0x0007;
+    public const UInt16 Keep_Alive = 0x0008;
+    public const UInt16 Keep_Alive_Ack = 0x0009;
+    public const UInt16 Synch_Pos = 0x000a;
 }

@@ -11,6 +11,7 @@ const int BYTE_SIZE  = 1;
 const int LONG_SIZE  = 4;
 const int SHORT_SIZE = 2;
 const int FLOAT_SIZE = 4;
+const int LONGLONG_SIZE=8;
 class CmdPacket  
 {
 public:
@@ -24,7 +25,10 @@ public:
 	bool ReadBinary(char **data,int *len);
 	bool ReadString(char **str);
 	bool ReadFloat(float *f);
-	bool ReadLong(long *l);
+	bool ReadInt(int *l);
+	bool ReadUInt(UINT32 *l);
+	bool ReadInt64(INT64 *l);
+	bool ReadUInt64(UINT64 *l);
 	bool ReadShort(short *s);
 	bool ReadUShort(u_short *s);
 	bool ReadByte(char *c);
@@ -32,7 +36,10 @@ public:
 	bool WriteBinary(char *data,int len);
 	bool WriteString(char *str);
 	bool WriteFloat(float f);
-	bool WriteLong(long l);
+	bool WriteInt(int l);
+	bool WriteUInt(UINT32 l);
+	bool WriteInt64(INT64 l);
+	bool WriteUInt64(UINT64 l);
 	bool WriteShort(short s);
 	bool WriteUShort(u_short s);
 	bool WriteByte(char c);

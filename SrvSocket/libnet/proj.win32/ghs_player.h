@@ -15,11 +15,19 @@ private:
 	UI64 m_serial;
 	CmdPacket m_packet;
 public:
+	void send(CmdPacket *);
+	void recv(CmdPacket* packet);
 	void sendGameInit();
 	void sendGameStart(bool bottom);
 	void sendGameShot(float x,float y);
+	void keepAlive();
 	bool m_ready;
 	GHS_Player* m_other;
 	GHS_Game* m_game;
+	UI32 m_lstSendTime;
+	UI32 m_lstRecvTime;
+	void process();
+	UI32 m_rtt;
+	bool m_bSer;
 };
 

@@ -5,6 +5,37 @@ g_CmdPacket.cpp: implementation of the CG_CmdPacket class.
 #include <memory>
 #include <WinSock.h>
 #include "../export/cmdpacket.h"
+#ifndef WIN32
+typedef long long __int64;
+#endif
+__int64 hton64(__int64 val ) 
+{ 
+	long high, low;
+	low = (long)(val & 0x00000000FFFFFFFF);
+	val>>=32;
+	high = (long)(val & 0x00000000FFFFFFFF);
+	low = htonl( low );
+	high = htonl( high );
+	__int64 nRet = 0;
+	nRet = low;
+	nRet <<=32;
+	nRet |= high;
+	return nRet; 
+} 
+__int64 ntoh64(__int64 val )
+{
+	long high, low;
+	low = (long)(val & 0x00000000FFFFFFFF);
+	val>>=32;
+	high = (long)(val & 0x00000000FFFFFFFF);
+	low = ntohl( low );
+	high = ntohl( high );
+	__int64 nRet = 0;
+	nRet = low;
+	nRet <<=32;
+	nRet |= high;
+	return nRet;
+}
 CmdPacket::CmdPacket()
 {
 	m_nMaxSize = 0;
@@ -95,12 +126,26 @@ bool CmdPacket::WriteUShort( u_short s )
 	return WriteData(&s,SHORT_SIZE);
 }
 
-bool CmdPacket::WriteLong(long l)
+bool CmdPacket::WriteInt(int l)
 {
 	l=htonl(l);
 	return WriteData(&l,LONG_SIZE);
 }
-
+bool CmdPacket::WriteUInt(UINT32 l)
+{
+	l=htonl(l);
+	return WriteData(&l,LONG_SIZE);
+}
+bool CmdPacket::WriteInt64(INT64 l)
+{
+	l=hton64(l);
+	return WriteData(&l,LONGLONG_SIZE);
+}
+bool CmdPacket::WriteUInt64(UINT64 l)
+{
+	l=hton64(l);
+	return WriteData(&l,LONGLONG_SIZE);
+}
 bool CmdPacket::WriteFloat(float f)
 {
 	return WriteData(&f,FLOAT_SIZE);
@@ -126,14 +171,34 @@ bool CmdPacket::ReadUShort( u_short *s )
 	return ret;
 }
 
-bool CmdPacket::ReadLong(long *l)
+bool CmdPacket::ReadInt(int *l)
 {
 	bool ret=ReadData(l,LONG_SIZE);
 	if(!ret)return ret;
 	*l=ntohl(*l);
 	return ret;
 }
-
+bool CmdPacket::ReadUInt(UINT32 *l)
+{
+	bool ret=ReadData(l,LONG_SIZE);
+	if(!ret)return ret;
+	*l=ntohl(*l);
+	return ret;
+}
+bool CmdPacket::ReadInt64(INT64 *l)
+{
+	bool ret=ReadData(l,LONGLONG_SIZE);
+	if(!ret)return ret;
+	*l=ntoh64(*l);
+	return ret;
+}
+bool CmdPacket::ReadUInt64(UINT64 *l)
+{
+	bool ret=ReadData(l,LONGLONG_SIZE);
+	if(!ret)return ret;
+	*l=ntoh64(*l);
+	return ret;
+}
 bool CmdPacket::ReadFloat(float *f)
 {
 	return ReadData(f,FLOAT_SIZE);

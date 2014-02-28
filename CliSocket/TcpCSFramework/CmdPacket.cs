@@ -21,6 +21,14 @@ namespace TcpCSFramework
         {
             m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)l)));
         }
+        public void WriteInt64(Int64 l)
+        {
+            m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(l)));
+        }
+        public void WriteUInt64(UInt64 l)
+        {
+            m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((long)l)));
+        }
         public void WriteShort(short l)
         {
             m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(l)));
@@ -32,6 +40,10 @@ namespace TcpCSFramework
         public void WriteInt(int l)
         {
             m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(l)));
+        }
+        public void WriteUInt(UInt32 l)
+        {
+            m_WriteData.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)l)));
         }
         public void WriteString(string l)
         {
@@ -50,16 +62,18 @@ namespace TcpCSFramework
             m_ReadData = bytes;
             m_ReadOffset = 0;
         }
-        public bool ReadByte(ref char c)
+        public bool ReadByte(out char c)
         {
+            c = '\0';
             if (m_ReadOffset + 1 > m_ReadData.Length)
                 return false;
             c = (char)m_ReadData[m_ReadOffset];
             m_ReadOffset += 1;
             return true;
         }
-        public bool ReadUShort(ref UInt16 l)
+        public bool ReadUShort(out UInt16 l)
         {
+            l = 0;
             if (m_ReadOffset + 2 > m_ReadData.Length)
                 return false;
             l = BitConverter.ToUInt16(m_ReadData, m_ReadOffset);
@@ -67,8 +81,9 @@ namespace TcpCSFramework
             m_ReadOffset += 2;
             return true;
         }
-        public bool ReadShort(ref short l)
+        public bool ReadShort(out short l)
         {
+            l = 0;
             if (m_ReadOffset + 2 > m_ReadData.Length)
                 return false;
             l = BitConverter.ToInt16(m_ReadData, m_ReadOffset);
@@ -76,16 +91,18 @@ namespace TcpCSFramework
             m_ReadOffset += 2;
             return true;
         }
-        public bool ReadFloat(ref float l)
+        public bool ReadFloat(out float l)
         {
+            l = 0;
             if (m_ReadOffset + 4 > m_ReadData.Length)
                 return false;
             l = BitConverter.ToSingle(m_ReadData, m_ReadOffset);
             m_ReadOffset += 4;
             return true;
         }
-        public bool ReadInt(ref int l)
+        public bool ReadInt(out int l)
         {
+            l = 0;
             if (m_ReadOffset + 4 > m_ReadData.Length)
                 return false;
             l = BitConverter.ToInt32(m_ReadData, m_ReadOffset);
@@ -93,10 +110,41 @@ namespace TcpCSFramework
             m_ReadOffset += 4;
             return true;
         }
-        public bool ReadString(ref string l)
+        public bool ReadUInt(out UInt32 l)
         {
+            l = 0;
+            if (m_ReadOffset + 4 > m_ReadData.Length)
+                return false;
+            int s = BitConverter.ToInt32(m_ReadData, m_ReadOffset);
+            l = (UInt32)IPAddress.NetworkToHostOrder(s);
+            m_ReadOffset += 4;
+            return true;
+        }
+        public bool ReadInt64(out Int64 l)
+        {
+            l = 0;
+            if (m_ReadOffset + 8 > m_ReadData.Length)
+                return false;
+            long s = BitConverter.ToInt64(m_ReadData, m_ReadOffset);
+            l = IPAddress.NetworkToHostOrder(s);
+            m_ReadOffset += 8;
+            return true;
+        }
+        public bool ReadUInt64(out UInt64 l)
+        {
+            l = 0;
+            if (m_ReadOffset + 8 > m_ReadData.Length)
+                return false;
+            long s = BitConverter.ToInt64(m_ReadData, m_ReadOffset);
+            l = (UInt64)IPAddress.NetworkToHostOrder(s);
+            m_ReadOffset += 8;
+            return true;
+        }
+        public bool ReadString(out string l)
+        {
+            l = "";
             ushort length = 0;
-            if (!ReadUShort(ref length))
+            if (!ReadUShort(out length))
                 return false;
             if (m_ReadOffset + length > m_ReadData.Length)
                 return false;

@@ -68,9 +68,9 @@ namespace TcpClient
         void RecvData(object sender, NetEventArgs e)
         {
             ushort cmd=0;
-            e.Client.RecvPacket.ReadUShort(ref cmd);
+            e.Client.RecvPacket.ReadUShort(out cmd);
             char bo='\0';
-            e.Client.RecvPacket.ReadByte(ref bo);
+            e.Client.RecvPacket.ReadByte(out bo);
 
             string str = Encoding.Default.GetString(e.Client.RecvPacket.GetReadData());
             string info = string.Format("recv data:{0}", cmd);

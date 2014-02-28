@@ -5,3 +5,6 @@
 #define PROTO_S_GameStart 0x0005
 #define PROTO_C_GameShot 0x0006
 #define PROTO_S_GameShot 0x0007
+#define PROTO_Keep_Alive 0x0008
+#define PROTO_Keep_Alive_Ack 0x0009
+#define PROTO_Synch_Pos 0x000a

@@ -5,7 +5,6 @@
 
 NS_YY_BEGIN
 
-
 static const int kMicroSecondsPerSecond = 1000 * 1000;
 
 #if (YY_TARGET_PLATFORM==YY_PLATFORM_WIN32)

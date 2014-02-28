@@ -5,6 +5,7 @@
 #include "cmdpacket.h"
 #include "FastDelegate.h"
 #include "FastDelegateBind.h"
+#include "yy_time.h"
 
 USING_NS_YY
 using namespace fastdelegate;

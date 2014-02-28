@@ -12,9 +12,8 @@ public class Game: MonoBehaviour
     public Transform m_tranBall;
     public Transform m_other;
     public Transform m_ball;
-    public void start(bool bottom)
+    public void start()
     {
-        m_bottom = bottom;
         m_state = State.ST_Start;
     }
     private float m_time;
@@ -27,6 +26,7 @@ public class Game: MonoBehaviour
     }
     public State m_state = State.ST_None;
     public bool m_bottom=false;
+    public bool m_bSer = false;
     void Update()
     {
         if (m_state == State.ST_Start)
@@ -62,7 +62,17 @@ public class Game: MonoBehaviour
             }
             m_time += Time.deltaTime;
             //同步位置和速度
-
+            if (m_bSer)
+            {
+                CmdPacket packet=new CmdPacket();
+                packet.WriteUShort(Proto.Synch_Pos);
+                packet.WriteUInt64(TimeMgr.getTimeStamp());
+                packet.WriteFloat(m_ball.position.x);
+                packet.WriteFloat(m_ball.position.z);
+                packet.WriteFloat(m_ball.rigidbody.velocity.x);
+                packet.WriteFloat(m_ball.rigidbody.velocity.z);
+                m_client.send(packet);
+            }
         }
     }
 }
