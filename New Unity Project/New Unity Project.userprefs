@@ -1,9 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\script\Client.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\script\Other.cs">
     <Files>
+      <File FileName="Assets\script\Other.cs" Line="1" Column="1" />
       <File FileName="Assets\script\InputMgr.cs" Line="1" Column="1" />
-      <File FileName="Assets\script\Client.cs" Line="83" Column="1" />
+      <File FileName="Assets\script\Client.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

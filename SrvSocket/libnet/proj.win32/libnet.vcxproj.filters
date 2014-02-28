@@ -146,9 +146,6 @@
     <ClInclude Include="..\export\Singleton.h">
       <Filter>libnet\export</Filter>
     </ClInclude>
-    <ClInclude Include="Proto.h">
-      <Filter>other</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>other</Filter>
     </ClInclude>
@@ -160,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="GHS_Game.h">
       <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="GHS_Proto.h">
+      <Filter>other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

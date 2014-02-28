@@ -130,7 +130,7 @@
     <ClInclude Include="GHS_Game.h" />
     <ClInclude Include="GHS_Lobby.h" />
     <ClInclude Include="GHS_Player.h" />
-    <ClInclude Include="Proto.h" />
+    <ClInclude Include="GHS_Proto.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

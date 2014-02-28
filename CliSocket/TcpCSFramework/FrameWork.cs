@@ -683,7 +683,7 @@ namespace TcpCSFramework
         }
         public void Send(CmdPacket packet)
         {
-            Send(packet.GetData());
+            Send(packet.GetWriteData());
         }
         public void Send(string datagram)
         {

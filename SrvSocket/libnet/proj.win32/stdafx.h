@@ -15,4 +15,4 @@ using namespace fastdelegate;
 #include <queue>
 using namespace std;
 
-#include "Proto.h"
+#include "GHS_Proto.h"

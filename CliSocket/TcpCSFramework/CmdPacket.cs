@@ -15,7 +15,7 @@ namespace TcpCSFramework
         }
         public void WriteByte(char c)
         {
-            m_WriteData.AddRange(BitConverter.GetBytes(c));
+            m_WriteData.Add((byte)c);
         }
         public void WriteUShort(UInt16 l)
         {
@@ -54,7 +54,7 @@ namespace TcpCSFramework
         {
             if (m_ReadOffset + 1 > m_ReadData.Length)
                 return false;
-            c = BitConverter.ToChar(m_ReadData, m_ReadOffset);
+            c = (char)m_ReadData[m_ReadOffset];
             m_ReadOffset += 1;
             return true;
         }
@@ -104,13 +104,13 @@ namespace TcpCSFramework
             m_ReadOffset += length;
             return true;
         }
-        public int GetDataSize()
-        {
-            return m_WriteData.Count;
-        }
-        public byte[] GetData()
+        public byte[] GetWriteData()
         {
             return m_WriteData.ToArray();
+        }
+        public byte[] GetReadData()
+        {
+            return m_ReadData;
         }
         public void BeginRead(List<byte> readByte)
         {

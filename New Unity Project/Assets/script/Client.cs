@@ -37,32 +37,48 @@ public class Client : MonoBehaviour {
         {
             ret += string.Format("{0:X} ", item);
         }
-        return string.Format("0x{0}", ret);
+        return string.Format("<== 0x{0}", ret);
     }
+    public Game m_game;
+    public Other m_other;
     void RecvData(object sender, NetEventArgs e)
     {
-        Sys_Log(getString(e.Client.RecvPacket.GetData()));
+        Sys_Log(getString(e.Client.RecvPacket.GetReadData()));
         UInt16 cmd=0;
         e.Client.RecvPacket.ReadUShort(ref cmd);
         switch (cmd)
         {
-            case Proto.GameInit:
+            case Proto.S_GameInit:
                 {
                     m_state = State.ST_GameInit;
                     break;
                 }
+            case Proto.S_GameStart:
+                {
+                    char bottom='\0';
+                    e.Client.RecvPacket.ReadByte(ref bottom);
+                    m_game.start(bottom!=0);
+                    m_state = State.ST_GameRunning;
+                    break;
+                }
+            case Proto.S_GameShot:
+                {
+                    float x=0,y=0;
+                    e.Client.RecvPacket.ReadFloat(ref x);
+                    e.Client.RecvPacket.ReadFloat(ref y);
+                    m_other.shot(x, y);
+                    break;
+                }
         }
-        string str = Encoding.Default.GetString(e.Client.RecvPacket.GetData());
-        Sys_Log("recv data:{0} from:{1}.", str, e.Client);
     }
-    TcpCli m_client = new TcpCli();
+    public TcpCli m_client = new TcpCli();
     void Awake()
     {
         m_client.ReceivedDatagram += new NetEvent(RecvData);
         m_client.DisConnectedServer += new NetEvent(ClientClose);
         m_client.ConnectedServer += new NetEvent(ClientConn);
     }
-    public enum State { ST_None, ST_Connected, ST_Disconnected, ST_WaitingToMatch, ST_GameInit };
+    public enum State { ST_None, ST_Connected, ST_Disconnected, ST_WaitingToMatch, ST_GameInit, ST_WaitingToStart, ST_GameRunning };
     public State m_state = State.ST_Disconnected;
     void OnGUI()
     {
@@ -89,7 +105,7 @@ public class Client : MonoBehaviour {
                     {
                         //send automatch
                         CmdPacket packet = new CmdPacket();
-                        packet.WriteUShort(Proto.AutoMatch);
+                        packet.WriteUShort(Proto.C_AutoMatch);
                         m_client.Send(packet);
                         m_state = State.ST_WaitingToMatch;
                     }
@@ -98,19 +114,35 @@ public class Client : MonoBehaviour {
                     if (GUILayout.Button("Cancel Match"))
                     {
                         CmdPacket packet = new CmdPacket();
-                        packet.WriteUShort(Proto.UAutoMatch);
+                        packet.WriteUShort(Proto.C_UAutoMatch);
                         m_client.Send(packet);
                         m_state = State.ST_Connected;
                     }
                     break;
                 case State.ST_GameInit:
-                    if (GUILayout.Button("Ready"))
                     {
-                       
+                        if (GUILayout.Button("Ready"))
+                        {
+                            CmdPacket packet = new CmdPacket();
+                            packet.WriteUShort(Proto.C_GameReady);
+                            m_client.Send(packet);
+                            m_state = State.ST_WaitingToStart;
+                        }
+                        break;
                     }
+                case State.ST_WaitingToStart:
+                case State.ST_GameRunning:
                     break;
             }
         }
+    }
+    public void sendInput(float x, float y)
+    {
+        CmdPacket packet = new CmdPacket();
+        packet.WriteUShort(Proto.C_GameShot);
+        packet.WriteFloat(x);
+        packet.WriteFloat(y);
+        m_client.Send(packet);
     }
     const int NET_KEEP_ALIVE_INTERVAL = 10 * 1000;
     const int NET_CONNECT_TIMEOUT = 30 * 1000;

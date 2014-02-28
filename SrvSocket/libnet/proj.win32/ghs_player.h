@@ -1,5 +1,6 @@
 #pragma once
 #include "cmdpacket.h"
+class GHS_Game;
 class GHS_Player
 {
 public:
@@ -14,6 +15,11 @@ private:
 	UI64 m_serial;
 	CmdPacket m_packet;
 public:
-	void sendReady();
+	void sendGameInit();
+	void sendGameStart(bool bottom);
+	void sendGameShot(float x,float y);
+	bool m_ready;
+	GHS_Player* m_other;
+	GHS_Game* m_game;
 };
 
