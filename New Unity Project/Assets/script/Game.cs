@@ -27,6 +27,7 @@ public class Game: MonoBehaviour
     public State m_state = State.ST_None;
     public bool m_bottom=false;
     public bool m_bSer = false;
+    private float m_lstSyncTime = 0;
     void Update()
     {
         if (m_state == State.ST_Start)
@@ -64,14 +65,18 @@ public class Game: MonoBehaviour
             //同步位置和速度
             if (m_bSer)
             {
-                CmdPacket packet=new CmdPacket();
-                packet.WriteUShort(Proto.Synch_Pos);
-                packet.WriteUInt64(TimeMgr.getTimeStamp());
-                packet.WriteFloat(m_ball.position.x);
-                packet.WriteFloat(m_ball.position.z);
-                packet.WriteFloat(m_ball.rigidbody.velocity.x);
-                packet.WriteFloat(m_ball.rigidbody.velocity.z);
-                m_client.send(packet);
+                if (Time.realtimeSinceStartup - m_lstSyncTime > 0.5f)
+                {
+                    CmdPacket packet = new CmdPacket();
+                    packet.WriteUShort(Proto.Synch_Pos);
+                    packet.WriteUInt64(TimeMgr.getTimeStamp());
+                    packet.WriteFloat(m_ball.position.x);
+                    packet.WriteFloat(m_ball.position.z);
+                    packet.WriteFloat(m_ball.rigidbody.velocity.x);
+                    packet.WriteFloat(m_ball.rigidbody.velocity.z);
+                    m_client.send(packet);
+                    m_lstSyncTime = Time.realtimeSinceStartup;
+                }
             }
         }
     }

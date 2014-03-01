@@ -72,6 +72,32 @@ public class Client : MonoBehaviour {
                     Sys_Log("herea:"+(int)m_rtt);
                     break;
                 }
+            case Proto.Synch_Pos:
+                {
+                    //同步位置和速度
+                    if (!m_game.m_bSer)
+                    {
+                        UInt64 time;
+                        packet.ReadUInt64(out time);
+                        float x, z, vx, vz;
+                        packet.ReadFloat(out x);
+                        packet.ReadFloat(out z);
+                        packet.ReadFloat(out vx);
+                        packet.ReadFloat(out vz);
+                        m_other.change(time, x, z, vx, vz);
+                    }
+                    break;
+                }
+            case Proto.S_GameShot:
+                {
+                    //同步操作
+                    float x = 0, y = 0;
+                    packet.ReadFloat(out x);
+                    packet.ReadFloat(out y);
+                    if (m_game.m_bSer)
+                        m_other.shot(x, y);
+                    break;
+                }
             case Proto.S_GameInit:
                 {
                     m_state = State.ST_GameInit;
@@ -82,19 +108,13 @@ public class Client : MonoBehaviour {
                     m_state = State.ST_GameRunning;
                     char bSer;
                     if (packet.ReadByte(out bSer))
-                        m_game.m_bSer = bSer != 0;
+                    {
+                       // m_game.m_bSer = bSer != 0;
+                    }
                     char bottom='\0';
                     if(packet.ReadByte(out bottom))
                         m_game.m_bottom=(bottom!=0);
                     m_game.start();
-                    break;
-                }
-            case Proto.S_GameShot:
-                {
-                    float x=0,y=0;
-                    e.Client.RecvPacket.ReadFloat(out x);
-                    e.Client.RecvPacket.ReadFloat(out y);
-                    m_other.shot(x, y);
                     break;
                 }
         }
@@ -102,6 +122,7 @@ public class Client : MonoBehaviour {
     public TcpCli m_client = new TcpCli();
     void Awake()
     {
+        m_game.m_bSer = true;
         m_client.ReceivedDatagram += new NetEvent(RecvData);
         m_client.DisConnectedServer += new NetEvent(ClientClose);
         m_client.ConnectedServer += new NetEvent(ClientConn);

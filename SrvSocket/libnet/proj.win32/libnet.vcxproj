@@ -99,6 +99,7 @@
     <ClCompile Include="..\src\Win_IOCP_io_service.cpp" />
     <ClCompile Include="GHS_Game.cpp" />
     <ClCompile Include="GHS_Lobby.cpp" />
+    <ClCompile Include="GHS_Npc.cpp" />
     <ClCompile Include="GHS_Player.cpp" />
     <ClCompile Include="ghs_server.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="..\export\sockbuf.h" />
     <ClInclude Include="GHS_Game.h" />
     <ClInclude Include="GHS_Lobby.h" />
+    <ClInclude Include="GHS_Npc.h" />
     <ClInclude Include="GHS_Player.h" />
     <ClInclude Include="GHS_Proto.h" />
     <ClInclude Include="stdafx.h" />

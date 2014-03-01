@@ -75,6 +75,9 @@
     <ClCompile Include="GHS_Game.cpp">
       <Filter>logic</Filter>
     </ClCompile>
+    <ClCompile Include="GHS_Npc.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\peer_manager.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="GHS_Proto.h">
       <Filter>other</Filter>
+    </ClInclude>
+    <ClInclude Include="GHS_Npc.h">
+      <Filter>logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

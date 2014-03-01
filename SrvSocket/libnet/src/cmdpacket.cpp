@@ -96,6 +96,12 @@ void CmdPacket::BeginWrite()
 	m_nWriteOffset = 0;
 }
 
+void CmdPacket::BeginWrite(char const*p,int len)
+{
+	memcpy(m_pData,p,len);
+	m_nLen = len;
+}
+
 bool CmdPacket::WriteBinary(char *data, int len)
 {
 	if (WriteShort(len)==false) 
@@ -259,6 +265,11 @@ int CmdPacket::GetDataSize()
 int CmdPacket::GetMaxSize()
 {
 	return m_nMaxSize;
+}
+
+char * CmdPacket::GetReadData()
+{
+	return m_pReadData;
 }
 
 

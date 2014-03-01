@@ -20,16 +20,15 @@ void GHS_Player::sendGameInit()
 {
 	m_packet.BeginWrite();
 	m_packet.WriteUShort(PROTO_S_GameInit);
-	m_packet.WriteByte(m_bSer);
 	send(&m_packet);
 }
 
-void GHS_Player::sendGameStart(bool bottom)
+void GHS_Player::sendGameStart()
 {
 	m_packet.BeginWrite();
 	m_packet.WriteUShort(PROTO_S_GameStart);
 	m_packet.WriteByte(m_bSer!=0);
-	m_packet.WriteByte(bottom);
+	m_packet.WriteByte(m_bottom);
 	send(&m_packet);
 }
 
@@ -52,7 +51,7 @@ void GHS_Player::keepAlive()
 
 void GHS_Player::send(CmdPacket *packet)
 {
-	SGHS_Game::shared()->send(m_index,m_serial,&packet);
+	SGHS_Game::shared()->send(m_index,m_serial,packet);
 	m_lstSendTime=GetTickCount();
 }
 void GHS_Player::process()
@@ -96,11 +95,13 @@ void GHS_Player::recv( CmdPacket* packet )
 		}
 	case PROTO_Synch_Pos:
 		{
-			if(m_other)
+			if(m_bSer&&m_other)
 			{
-				
-				m_other->send(packet);
+				CmdPacket packet2;
+				packet2.BeginWrite(packet->GetReadData(),packet->GetDataSize());
+				m_other->send(&packet2);
 			}
+			break;
 		}
 	case PROTO_C_AutoMatch:
 		{
@@ -117,14 +118,13 @@ void GHS_Player::recv( CmdPacket* packet )
 			m_ready=true;
 			if(m_other&&m_other->m_ready)
 			{
-				m_game->m_player1->sendGameStart(true);
-				m_game->m_player2->sendGameStart(false);
+				m_game->start();
 			}
 			break;
 		}
 	case PROTO_C_GameShot:
 		{
-			if(m_game)
+			if(m_game&&!m_bSer)
 			{
 				float x=0;
 				packet->ReadFloat(&x);

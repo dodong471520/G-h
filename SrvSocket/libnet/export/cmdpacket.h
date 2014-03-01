@@ -19,6 +19,7 @@ public:
 	virtual ~CmdPacket();
 
 	void BeginWrite();
+	void BeginWrite(char const*p,int len);
 	void BeginRead(char const*p,int len);
 	void BeginRead();
 
@@ -50,7 +51,8 @@ public:
 
 	bool  SetSize(int len);
 	bool  CloneFrom(CmdPacket *packet);
-
+	
+	char *GetReadData();
 private :
 	bool  CopyData(char *buf,int len);
 	bool  WriteData(void *data,int len);

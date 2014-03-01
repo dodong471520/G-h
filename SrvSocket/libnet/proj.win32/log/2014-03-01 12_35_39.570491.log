@@ -1,0 +1,15 @@
+[Info] [threadID:4424][2014-03-01 12:35:39.567991] server start 127.0.0.1:5001
+[Info] [threadID:4424][2014-03-01 12:35:57.074214] new connection, index:0, serial:0, ip:127.0.0.1, port:32231
+
+[Info] [threadID:4424][2014-03-01 12:36:00.494648] new connection, index:1, serial:1, ip:127.0.0.1, port:32241
+
+[Info] [threadID:4424][2014-03-01 12:36:22.835485] disconnection, index:0, serial:0, ip:127.0.0.1, port:32231
+
+[Info] [threadID:4424][2014-03-01 12:36:23.651588] new connection, index:0, serial:2, ip:127.0.0.1, port:32296
+
+[Info] [threadID:4424][2014-03-01 12:36:26.088398] disconnection, index:1, serial:1, ip:127.0.0.1, port:32241
+
+[Info] [threadID:4424][2014-03-01 12:36:27.672599] new connection, index:1, serial:3, ip:127.0.0.1, port:32308
+
+[Info] [threadID:4424][2014-03-01 12:37:10.176496] disconnection, index:0, serial:2, ip:127.0.0.1, port:32296
+

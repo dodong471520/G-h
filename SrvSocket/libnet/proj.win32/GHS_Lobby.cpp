@@ -74,12 +74,7 @@ void GHS_Lobby::makeGame()
 	GHS_Player *player2=*itor;
 	m_queue.erase(itor);
 	GHS_Game *game=new GHS_Game(player1,player2);
-	player1->m_game=game;player1->m_other=player2;
-	player2->m_game=game;player2->m_other=player1;
-	if(player1->m_rtt<=player2->m_rtt)
-		player1->m_bSer;
-	player1->sendGameInit();
-	player2->sendGameInit();
+	game->init();
 	m_games.push_back(game);
 }
 
@@ -90,6 +85,12 @@ void GHS_Lobby::process()
 	{
 		GHS_Player *player=itor->second;
 		player->process();
+	}
+	VEC_GAME_ITOR itor2=m_games.begin();
+	for(;itor2!=m_games.end();++itor2)
+	{
+		GHS_Game *game=*itor2;
+		game->process();
 	}
 }
 

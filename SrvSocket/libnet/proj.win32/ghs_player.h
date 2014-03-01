@@ -18,7 +18,7 @@ public:
 	void send(CmdPacket *);
 	void recv(CmdPacket* packet);
 	void sendGameInit();
-	void sendGameStart(bool bottom);
+	void sendGameStart();
 	void sendGameShot(float x,float y);
 	void keepAlive();
 	bool m_ready;
@@ -29,5 +29,6 @@ public:
 	void process();
 	UI32 m_rtt;
 	bool m_bSer;
+	bool m_bottom;
 };
 

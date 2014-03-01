@@ -8,5 +8,8 @@ public:
 public:
 	GHS_Player* m_player1;
 	GHS_Player* m_player2;
+	void process();
+	void init();
+	void start();
 };
 
