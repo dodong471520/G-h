@@ -24,7 +24,7 @@ public class InputMgr : MonoBehaviour {
         if (cameraVec.x < -3) cameraVec.x = -3;
         if (cameraVec.x > 3) cameraVec.x = 3;
         Camera.main.transform.position = cameraVec;
-        if (!m_enabled)
+        if (m_game.m_state!=Game.State.ST_Running)
             return;
         if (m_game.m_bottom&&ball.position.z <= 0||!m_game.m_bottom&&ball.position.z>=0)
         {
@@ -44,11 +44,15 @@ public class InputMgr : MonoBehaviour {
                 Vector3 direction = ball.position - selfGun.position;
                 direction.y = 0;
                 Debug.Log("self:" + direction);
-                ball.rigidbody.AddForce(direction * rate, ForceMode.Impulse);
-                if (!m_game.m_bSer)
-                    m_client.sendInput(direction.x, direction.z);
+                ball.rigidbody.velocity = direction * rate;
+                //ball.rigidbody.AddForce(direction * rate, ForceMode.Impulse);
+
+                CmdPacket packet = new CmdPacket();
+                packet.WriteUShort(Proto.C_GameShot);
+                packet.WriteFloat(ball.rigidbody.velocity.x);
+                packet.WriteFloat(ball.rigidbody.velocity.z);
+                m_client.send(packet);
             }
-           
         }
         if (Input.GetKey(KeyCode.A))
             cameraVec.x += -1 * Time.deltaTime*cameraMoveSpeed;

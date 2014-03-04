@@ -1,0 +1,7 @@
+[Info] [threadID:4684][2014-03-02 00:41:05.444869] server start 127.0.0.1:5001
+[Info] [threadID:4684][2014-03-02 00:41:54.775691] new connection, index:0, serial:0, ip:127.0.0.1, port:9342
+
+[Info] [threadID:4684][2014-03-02 00:42:10.675600] new connection, index:1, serial:1, ip:127.0.0.1, port:9358
+
+[Info] [threadID:4684][2014-03-02 00:45:39.848564] disconnection, index:1, serial:1, ip:127.0.0.1, port:9358
+

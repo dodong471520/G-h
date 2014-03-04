@@ -54,7 +54,8 @@ CmdPacket::~CmdPacket()
 
 bool CmdPacket::SetSize(int len)
 {
-	if(len > MAX_CMD_PACKET_SIZE) return false;
+	if(len > MAX_CMD_PACKET_SIZE) 
+		return false;
 	delete []m_pData;
 	m_pData = 0;
 	m_pData = new char[len];
@@ -98,7 +99,7 @@ void CmdPacket::BeginWrite()
 
 void CmdPacket::BeginWrite(char const*p,int len)
 {
-	memcpy(m_pData,p,len);
+	CopyData(p,len);
 	m_nLen = len;
 }
 
@@ -239,7 +240,7 @@ bool CmdPacket::ReadData(void *data, int len)
 	return true;
 }
 
-bool CmdPacket::CopyData(char *buf,int len)
+bool CmdPacket::CopyData(char const*buf,int len)
 {
 	if(!SetSize(len)) return false;
 	memcpy(m_pData,buf,len);

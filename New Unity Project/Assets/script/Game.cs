@@ -12,7 +12,7 @@ public class Game: MonoBehaviour
     public Transform m_tranBall;
     public Transform m_other;
     public Transform m_ball;
-    public void start()
+    public void gameStart()
     {
         m_state = State.ST_Start;
     }
@@ -65,11 +65,11 @@ public class Game: MonoBehaviour
             //同步位置和速度
             if (m_bSer)
             {
-                if (Time.realtimeSinceStartup - m_lstSyncTime > 0.5f)
+                //if (Time.realtimeSinceStartup - m_lstSyncTime > Time.deltaTime)
                 {
                     CmdPacket packet = new CmdPacket();
                     packet.WriteUShort(Proto.Synch_Pos);
-                    packet.WriteUInt64(TimeMgr.getTimeStamp());
+                    packet.WriteUInt64(TimeMgr.getTimeStampMicro());
                     packet.WriteFloat(m_ball.position.x);
                     packet.WriteFloat(m_ball.position.z);
                     packet.WriteFloat(m_ball.rigidbody.velocity.x);

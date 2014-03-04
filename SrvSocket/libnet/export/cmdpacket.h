@@ -54,7 +54,7 @@ public:
 	
 	char *GetReadData();
 private :
-	bool  CopyData(char *buf,int len);
+	bool  CopyData(char const*buf,int len);
 	bool  WriteData(void *data,int len);
 	bool  ReadData(void *data,int len);
 

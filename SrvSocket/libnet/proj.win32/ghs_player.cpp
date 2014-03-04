@@ -95,11 +95,12 @@ void GHS_Player::recv( CmdPacket* packet )
 		}
 	case PROTO_Synch_Pos:
 		{
-			if(m_bSer&&m_other)
+			//if(m_bSer&&m_other)
 			{
 				CmdPacket packet2;
 				packet2.BeginWrite(packet->GetReadData(),packet->GetDataSize());
-				m_other->send(&packet2);
+				if(m_other)
+					m_other->send(&packet2);
 			}
 			break;
 		}
@@ -124,13 +125,11 @@ void GHS_Player::recv( CmdPacket* packet )
 		}
 	case PROTO_C_GameShot:
 		{
-			if(m_game&&!m_bSer)
+			if(m_game)//&&!m_bSer)
 			{
-				float x=0;
-				packet->ReadFloat(&x);
-				float y=0;
-				packet->ReadFloat(&y);
-				m_other->sendGameShot(x,y);
+				CmdPacket packet2;
+				packet2.BeginWrite(packet->GetReadData(),packet->GetDataSize());
+				m_other->send(&packet2);
 			}
 		}
 	}

@@ -21,10 +21,18 @@ void GHS_Game::init()
 {
 	m_player1->m_game=this;m_player1->m_other=m_player2;
 	m_player2->m_game=this;m_player2->m_other=m_player1;
-	if(m_player1->m_rtt<=m_player2->m_rtt)
-		m_player1->m_bSer=true;
+	m_player1->m_bSer=true;
+	m_player2->m_bSer=false;
+	/*if(m_player1->m_rtt<=m_player2->m_rtt)
+	{
+	m_player1->m_bSer=true;
+	m_player2->m_bSer=false;
+	}
 	else
-		m_player2->m_bSer=true;
+	{
+	m_player1->m_bSer=false;
+	m_player2->m_bSer=true;
+	}*/
 	m_player1->m_bottom=true;
 	m_player2->m_bottom=false;
 	m_player1->sendGameInit();

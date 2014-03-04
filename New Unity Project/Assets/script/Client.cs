@@ -32,12 +32,12 @@ public class Client : MonoBehaviour {
         Sys_Log("Disconnectd:" + e.Client.ClientSocket.RemoteEndPoint
             + "\n" + e.Client.TypeOfExit);
     }
-    static string getString(byte[] buff)
+   public static string getString(byte[] buff)
     {
         string ret = "";
         foreach (var item in buff)
         {
-            ret += string.Format("{0:X} ", item);
+            ret += string.Format("[{0:X}]", item);
         }
         return string.Format("<== 0x{0}", ret);
     }
@@ -69,7 +69,6 @@ public class Client : MonoBehaviour {
                     UInt32 time = 0;
                     if (packet.ReadUInt(out time))
                         m_rtt = Sys_GetTime() - time;
-                    Sys_Log("herea:"+(int)m_rtt);
                     break;
                 }
             case Proto.Synch_Pos:
@@ -88,14 +87,14 @@ public class Client : MonoBehaviour {
                     }
                     break;
                 }
-            case Proto.S_GameShot:
+            case Proto.C_GameShot:
                 {
                     //同步操作
-                    float x = 0, y = 0;
-                    packet.ReadFloat(out x);
-                    packet.ReadFloat(out y);
-                    if (m_game.m_bSer)
-                        m_other.shot(x, y);
+                    float vx,vz;
+                    packet.ReadFloat(out vx);
+                    packet.ReadFloat(out vz);
+                    //if (m_game.m_bSer)
+                        m_other.shot(vx,vz);
                     break;
                 }
             case Proto.S_GameInit:
@@ -108,13 +107,11 @@ public class Client : MonoBehaviour {
                     m_state = State.ST_GameRunning;
                     char bSer;
                     if (packet.ReadByte(out bSer))
-                    {
-                       // m_game.m_bSer = bSer != 0;
-                    }
-                    char bottom='\0';
+                        m_game.m_bSer = (bSer != 0);
+                    char bottom;
                     if(packet.ReadByte(out bottom))
                         m_game.m_bottom=(bottom!=0);
-                    m_game.start();
+                    m_game.gameStart();
                     break;
                 }
         }
@@ -122,7 +119,7 @@ public class Client : MonoBehaviour {
     public TcpCli m_client = new TcpCli();
     void Awake()
     {
-        m_game.m_bSer = true;
+       // m_game.m_bSer = true;
         m_client.ReceivedDatagram += new NetEvent(RecvData);
         m_client.DisConnectedServer += new NetEvent(ClientClose);
         m_client.ConnectedServer += new NetEvent(ClientConn);
@@ -131,7 +128,7 @@ public class Client : MonoBehaviour {
     public State m_state = State.ST_Disconnected;
     void OnGUI()
     {
-        GUILayout.Label("Ping:" + m_rtt);
+        GUILayout.Label("Ping:" + m_rtt+",Pos:"+m_game.m_ball.position+",Vel:"+m_game.m_ball.rigidbody.velocity);
         GUILayout.Label(m_state.ToString());
         if (m_state == State.ST_Disconnected)
         {
